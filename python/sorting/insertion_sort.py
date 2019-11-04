@@ -9,6 +9,6 @@ def insertion_sort(arr):
             j -= 1
         arr[j+1] = key
 
-numbers = [23,43,21,2,3,56,99,]
+numbers = [23,43,21,2,3,56,99,283]
 insertion_sort(numbers)
 print(f'Sorted numbers: {numbers}')
