@@ -42,6 +42,61 @@ class BinarySearchTree:
                 return current_node
         return False
 
+    def remove(self, value):
+        if(not self.root):
+            return False
+        current_node = self.root
+        parent_node = None
+        while(current_node):
+            if(value < current_node.value):
+                parent_node = current_node
+                current_node = current_node.left
+            elif(value > current_node.value):
+                parent_node = current_node
+                current_node = current_node.right
+            elif(current_node.value == value):
+                # If no right child
+                if(not current_node.right):
+                    if(not parent_node):
+                        self.root = current_node.left
+                    else:
+                        if(current_node.value < parent_node.value):
+                            parent_node.left = current_node.left
+                        elif(current_node.value > parent_node.value):
+                            parent_node.right = current_node.left
+                # Right child which doesn't have left child
+                elif(not current_node.right.left):
+                    if(not parent_node):
+                        self.root = current_node.left
+                    else:
+                        current_node.right.left = current_node.left
+                        if(current_node.value < parent_node.value):
+                            parent_node.left = current_node.right
+                        elif(current_node.value > parent_node.value):
+                            parent_node.right = current_node.right
+                # Right child that has a left child
+                else:
+                    # Find the right child's left most child.
+                    leftmost = current_node.right.left
+                    leftmost_parent = current_node.right
+                    while(not leftmost.left):
+                        leftmost_parent = leftmost
+                        leftmost = leftmost.left
+
+                    # Parent's left subtree is now leftmost's right subtree.
+                    leftmost_parent.left = leftmost.right
+                    leftmost.left = current_node.left
+                    leftmost.right = current_node.right
+
+                    if(not parent_node):
+                        self.root = leftmost
+                    else:
+                        if(current_node.value < parent_node.value):
+                            parent_node.left = lefmost
+                        elif(current_node.value > parent_node.value):
+                            parent_node.right = leftmost
+            return True
+
 tree = BinarySearchTree()
 tree.insert(9)
 tree.insert(4)
@@ -52,3 +107,5 @@ tree.insert(6)
 print(tree)
 print(tree.lookup(6).value)
 print(tree.lookup(100))
+print(tree.remove(9))
+print(tree)
