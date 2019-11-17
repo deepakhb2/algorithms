@@ -1,6 +1,6 @@
-class LinkedList():
+class DoubleLinkedList:
     def __init__(self, value):
-        self.head = { 'value': value, 'next': None }
+        self.head = { 'value': value, 'next': None, 'previous': None }
         self.tail = self.head
         self.length = 1
 
@@ -8,13 +8,16 @@ class LinkedList():
         return str(self.head)
 
     def append(self, value):
-        new_node = { 'value': value, 'next': None }
+        new_node = { 'value': value, 'next': None, 'previous': None }
+        new_node['previous'] = self.tail
         self.tail['next'] = new_node
         self.tail = new_node
         self.length += 1
 
     def prepend(self, value):
-        new_node = { 'value': value, 'next': self.head }
+        new_node = { 'value': value, 'next': None, 'previous': None }
+        new_node['next'] = self.head
+        self.head['previous'] = new_node
         self.head = new_node
         self.length += 1
 
@@ -29,15 +32,18 @@ class LinkedList():
     def insert(self, value, index):
         if(index >= self.length):
             self.append(value)
-        new_node = { 'value': value, 'next': None }
+        new_node = { 'value': value, 'next': None, 'previous': None }
         leader = self.traverse_to_index(index-1)
         holding_pointer = leader['next']
         leader['next'] = new_node
+        new_node['previous'] = leader
         new_node['next'] = holding_pointer
+        holding_pointer['previous'] = new_node
         self.length += 1
 
     def remove(self, index):
         leader = self.traverse_to_index(index-1)
+        leader['next']['next']['previous'] = leader
         leader['next'] = leader['next']['next']
         self.length -= 1
 
@@ -49,6 +55,7 @@ class LinkedList():
         while(second):
             temp = second['next']
             second['next'] = first
+            first['previous'] = second
             first = second
             second = temp
 
@@ -63,10 +70,9 @@ class LinkedList():
             current_node = current_node['next']
             counter += 1
 
-my_linked_list = LinkedList(10)
+my_linked_list = DoubleLinkedList(10)
 my_linked_list.append(5)
 my_linked_list.append(16)
-my_linked_list.append(20)
 my_linked_list.prepend(9)
 my_linked_list.insert(8, 1)
 my_linked_list.remove(1)
