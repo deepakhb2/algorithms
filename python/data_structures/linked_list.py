@@ -41,6 +41,16 @@ class LinkedList():
         leader['next'] = leader['next']['next']
         self.length -= 1
 
+    def values(self):
+        values = []
+        current_node = self.head
+        counter = 0
+        while(counter != self.length):
+            values.append(current_node['value'])
+            current_node = current_node['next']
+            counter += 1
+        return values
+
     def reverse(self):
         first = self.head
         self.tail = self.head
@@ -54,14 +64,6 @@ class LinkedList():
 
         self.head['next'] = None
         self.head = first
-
-    def print_list(self):
-        current_node = self.head
-        counter = 0
-        while(counter != self.length):
-            print(current_node['value'])
-            current_node = current_node['next']
-            counter += 1
 
 my_linked_list = LinkedList(10)
 my_linked_list.append(5)
